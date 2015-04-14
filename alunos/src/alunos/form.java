@@ -20,6 +20,7 @@ public class form extends JFrame {
 	public JPanel contentPane;
 	public JTextField textfirstName;
 	public JTextField textlastName;
+	public JTextField textNascimentoDia,textNascimentoMes, textNascimentoAno;
 
 	
 	/**
@@ -58,6 +59,19 @@ public class form extends JFrame {
 		textlastName.setBounds(99, 89, 114, 19);
 		contentPane.add(textlastName);
 		textlastName.setColumns(10);
+		
+		textNascimentoDia = new JTextField();
+		textNascimentoDia.setBounds(99, 120, 25, 19);
+		contentPane.add(textNascimentoDia);
+		textNascimentoDia.setColumns(10);
+		textNascimentoMes = new JTextField();
+		textNascimentoMes.setBounds(132, 120, 25, 19);
+		contentPane.add(textNascimentoMes);
+		textNascimentoMes.setColumns(10);
+		textNascimentoAno = new JTextField();
+		textNascimentoAno.setBounds(164, 120, 50, 19);
+		contentPane.add(textNascimentoAno);
+		textNascimentoAno.setColumns(10);
 		
 		final JComboBox comboTitle = new JComboBox();
 		comboTitle.setModel(new DefaultComboBoxModel(new String[] {"Mr.", "Mrs.", "Miss.", "Ms.", "Dr.", "Other"}));
