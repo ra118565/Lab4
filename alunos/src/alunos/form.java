@@ -23,11 +23,92 @@ public class form extends JFrame {
 	public JTextField textNascimentoDia,textNascimentoMes, textNascimentoAno;
 	public JTextField textCPF;
 	public JTextField textDDI, textDDD, textNum;
+	public JTextField textEmail;
 	public JTextField textAdr1;
 	public JTextField textCompl;
 	public JTextField textCEP, textCEP2;
 	public JTextField textCity, textState, textCountry;
 	
+	public static boolean isNumeric(String str)  
+	{  
+		 return str.matches("\\d+"); //Regex para detectar se datas e telefones são números
+	}
+	
+	public static boolean isValidEmail(String str){
+		return str.matches(".+@{1}.+");
+	}
+
+	public static boolean isValidCPF(String str){
+		return str.matches("\\d{2,3}\\.?\\d{3}\\.?\\d{3}-?\\d{2}"); //verifica strings com '-' e '.' opcionais
+	}
+	
+	public int camposObrigatorios(){ 
+//verifica se algum campo obrigatório está fantando (retorna o primeiro que achar)
+		if(textfirstName.getText().equals(""))
+			return 1; //primeiro nome
+		else if(textlastName.getText().equals(""))
+			return 2; //ultimo nome
+		else if(textNascimentoDia.getText().equals(""))
+			return 3; //dia de nascimento
+		else if(textNascimentoDia.getText().length() == 2 &&
+				textNascimentoDia.getText().compareTo("31") > 0) //verifica se há mais que 31 dias na entrada 
+			return 27;
+		else if(textNascimentoMes.getText().equals(""))
+			return 4; //mes de nascimento
+		else if(textNascimentoMes.getText().length() == 2 &&
+				textNascimentoMes.getText().compareTo("12") > 0) //verifica se há mais que 12 meses na entrada 
+			return 28;
+		else if(textNascimentoAno.getText().equals(""))
+			return 5; //ano de nascimento
+		else if(textCPF.getText().equals(""))
+			return 6; //CPF
+		else if(textDDI.getText().equals(""))
+			return 7; //DDI do telefone
+		else if(textDDD.getText().equals(""))
+			return 8; //DDD do telefone
+		else if(textNum.getText().equals(""))
+			return 9; //Numero do telefone
+		else if(textEmail.getText().equals(""))
+			return 10; //Email
+		else if(textNascimentoDia.getText().length() > 2)
+			return 11; //dia de nascimento com mais dígitos que o permitido
+		else if(textNascimentoMes.getText().length() > 2)
+			return 12; //mes de nascimento com mais dígitos que o permitido
+		else if(textNascimentoAno.getText().length() > 4)
+			return 13; //ano de nascimento com mais dígitos que o permitido
+		else if(!isNumeric(textNascimentoDia.getText()))
+			return 14; //dia deve ser número
+		else if(!isNumeric(textNascimentoMes.getText()))
+			return 15;
+		else if(!isNumeric(textNascimentoAno.getText()))
+			return 16;
+		else if(!isNumeric(textDDI.getText()))
+			return 17;
+		else if(textDDI.getText().length() > 2)
+			return 18;
+		else if(textDDD.getText().length() > 2)
+			return 19;
+		else if(textNum.getText().length() > 9)
+			return 20;
+		else if(textNum.getText().length() < 7)
+			return 21;
+		else if(!isNumeric(textDDD.getText()))
+			return 22;
+		else if(!isNumeric(textNum.getText()))
+			return 23;
+		else if( (!textCEP.getText().equals("") && !isNumeric(textCEP.getText()) && textCEP.getText().length() != 5) || 
+				(!textCEP.getText().equals("") && !isNumeric(textCEP2.getText()) && textCEP2.getText().length() != 3)
+				)
+			return 24;
+		else if(!isValidEmail(textEmail.getText()))
+			return 25;
+		else if(!isValidCPF(textCPF.getText()))
+			return 26;
+		else if(!textCompl.getText().equals("") && textAdr1.getText().equals(""))
+			return 29; //complemento preenchido mas endereço em branco
+		// caso em que esta tudo ok
+			return 0; 
+	}
 	
 	/**
 	 * Launch the application.
@@ -42,7 +123,8 @@ public class form extends JFrame {
 					e.printStackTrace();
 				}
 			}
-		});
+		})
+			;
 	}
 
 	/**
@@ -88,85 +170,84 @@ public class form extends JFrame {
 		textlastName.setColumns(10);
 		
 //DIA MES E ANO DE NASCIMENTO
-		JLabel lblDataNiver = new JLabel("Data de nascimento*");
+		JLabel lblDataNiver = new JLabel("Birth Date*");
 		lblDataNiver.setBounds(290, 60, 150, 15);
 		contentPane.add(lblDataNiver);
 
-		JLabel lblDiaNiver = new JLabel("Dia");
-		lblDiaNiver.setBounds(320, 83, 30, 15);
+		JLabel lblDiaNiver = new JLabel("Day");
+		lblDiaNiver.setBounds(310, 83, 60, 15);
 		contentPane.add(lblDiaNiver);
 		textNascimentoDia = new JTextField();
-		textNascimentoDia.setBounds(355, 80, 25, 19);
+		textNascimentoDia.setBounds(370, 80, 25, 19);
 		contentPane.add(textNascimentoDia);
 		textNascimentoDia.setColumns(10);
 		
-		JLabel lblMesNiver = new JLabel("Mês");
-		lblMesNiver.setBounds(320, 105, 30, 15);
+		JLabel lblMesNiver = new JLabel("Month");
+		lblMesNiver.setBounds(310, 105, 60, 15);
 		contentPane.add(lblMesNiver);
 		textNascimentoMes = new JTextField();
-		textNascimentoMes.setBounds(355, 102, 25, 19);
+		textNascimentoMes.setBounds(370, 102, 25, 19);
 		contentPane.add(textNascimentoMes);
 		textNascimentoMes.setColumns(10);
 		
-		JLabel lblAnoNiver = new JLabel("Ano");
-		lblAnoNiver.setBounds(320, 127, 30, 15);
+		JLabel lblAnoNiver = new JLabel("Year");
+		lblAnoNiver.setBounds(310, 127, 60, 15);
 		contentPane.add(lblAnoNiver);		
 		textNascimentoAno = new JTextField();
-		textNascimentoAno.setBounds(355, 124, 50, 19);
+		textNascimentoAno.setBounds(370, 124, 50, 19);
 		contentPane.add(textNascimentoAno);
 		textNascimentoAno.setColumns(10);
 		
 //EMAIL
 		JLabel lblEmail = new JLabel("E-mail*");
-		lblEmail.setBounds(12, 127, 90, 15);
+		lblEmail.setBounds(12, 137, 90, 15);
 		contentPane.add(lblEmail);
 		
-		textlastName = new JTextField();
-		textlastName.setBounds(70, 124, 195, 19);
-		contentPane.add(textlastName);
-		textlastName.setColumns(10);		
+		textEmail = new JTextField();
+		textEmail.setBounds(70, 134, 195, 19);
+		contentPane.add(textEmail);
+		textEmail.setColumns(10);		
 		
 //CPF
 		JLabel lblCPF = new JLabel("CPF*");
-		lblCPF.setBounds(12, 164, 90, 15);
+		lblCPF.setBounds(12, 174, 90, 15);
 		contentPane.add(lblCPF);
 		
 		textCPF = new JTextField();
-		textCPF.setBounds(70, 161, 130, 19);
+		textCPF.setBounds(70, 171, 130, 19);
 		contentPane.add(textCPF);
 		textCPF.setColumns(10);
 		
-//Phone
+//PHONE
 		JLabel lblPhone = new JLabel("Phone*");
 		lblPhone.setBounds(240, 185, 90, 15);
 		contentPane.add(lblPhone);
 		
-		JLabel lblPhoneDDD = new JLabel("DDI       +");
-		lblPhoneDDD.setBounds(310, 163, 90, 15);
+		JLabel lblPhoneDDD = new JLabel("DDI          +");
+		lblPhoneDDD.setBounds(310, 173, 90, 15);
 		contentPane.add(lblPhoneDDD);
 		textDDI = new JTextField();
-		textDDI.setBounds(376, 161, 30, 19);
+		textDDI.setBounds(386, 171, 30, 19);
 		contentPane.add(textDDI);
 		textDDI.setColumns(10);	
 		
 		JLabel lblPhoneDDI = new JLabel("DDD");
-		lblPhoneDDI.setBounds(310, 185, 90, 15);
+		lblPhoneDDI.setBounds(310, 195, 90, 15);
 		contentPane.add(lblPhoneDDI);
 		textDDD = new JTextField();
-		textDDD.setBounds(376, 183, 30, 19);
+		textDDD.setBounds(376, 193, 30, 19);
 		contentPane.add(textDDD);
 		textDDD.setColumns(10);	
 		
-		
-		JLabel lblPhoneNumero = new JLabel("Número");
-		lblPhoneNumero.setBounds(310, 207, 90, 15);
+		JLabel lblPhoneNumero = new JLabel("Number");
+		lblPhoneNumero.setBounds(310, 217, 90, 15);
 		contentPane.add(lblPhoneNumero);
 		textNum = new JTextField();
-		textNum.setBounds(376, 205, 80, 19);
+		textNum.setBounds(376, 215, 80, 19);
 		contentPane.add(textNum);
 		textNum.setColumns(10);	
 		
-//Adress
+//ADRESS
 		JLabel lblAdress1 = new JLabel("Adress");
 		lblAdress1.setBounds(12, 230, 90, 15);
 		contentPane.add(lblAdress1);
@@ -174,7 +255,7 @@ public class form extends JFrame {
 		textAdr1 = new JTextField();
 		textAdr1.setBounds(12, 250, 418, 19);
 		contentPane.add(textAdr1);
-		textAdr1.setColumns(10);
+		textAdr1.setColumns(10);	
 		
 		JLabel lblCompl = new JLabel("Apt, floor, suite, etc");
 		lblCompl.setBounds(12, 282, 240, 15);
@@ -186,7 +267,7 @@ public class form extends JFrame {
 		textCompl.setColumns(10);
 			
 		
-//Adress
+//CEP
 		JLabel lblCEP = new JLabel("CEP");
 		lblCEP.setBounds(12, 322, 90, 15);
 		contentPane.add(lblCEP);
@@ -238,13 +319,35 @@ public class form extends JFrame {
 		btnPrint.addActionListener(new ActionListener() {
 			@SuppressWarnings("deprecation")
 			public void actionPerformed(ActionEvent e) {		
-				//contentPane.setVisible(false);
-				print printForm = new print();
-				printForm.titleLabel.setText((String) comboTitle.getSelectedItem());
-				printForm.firstNameLabel.setText(textfirstName.getText());
-				printForm.lastNameLabel.setText(textlastName.getText());
-				//printForm.contentPane.setVisible(true);				
-				printForm.show();	
+				contentPane.setVisible(false);
+				int obrig = camposObrigatorios();
+				if(obrig != 0){
+					printErro printForm = new printErro(obrig);
+					printForm.show();
+				}else{
+					print printForm = new print();
+					printForm.titleLabel.setText((String) comboTitle.getSelectedItem());
+					printForm.firstNameLabel.setText(textfirstName.getText());
+					printForm.lastNameLabel.setText(textlastName.getText());
+					printForm.DiaNiverLabel.setText(textNascimentoDia.getText());
+					printForm.MesNiverLabel.setText(textNascimentoMes.getText());
+					printForm.AnoNiverLabel.setText(textNascimentoAno.getText());
+					printForm.EmailLabel.setText(textEmail.getText());
+					printForm.CPFLabel.setText(textCPF.getText());
+					printForm.AdressLabel.setText(textAdr1.getText());
+					printForm.ComplLabel.setText(textCompl.getText());
+					printForm.DDILabel.setText(textDDI.getText());
+					printForm.DDDLabel.setText(textDDD.getText());
+					printForm.NumeroLabel.setText(textNum.getText());
+					printForm.CEP1Label.setText(textCEP.getText());
+					printForm.CEP2Label.setText(textCEP2.getText());
+					printForm.CidadeLabel.setText(textCity.getText());
+					printForm.EstadoLabel.setText(textState.getText());
+					printForm.PaisLabel.setText(textCountry.getText());
+						
+					printForm.contentPane.setVisible(true);
+					printForm.show();	
+				}
 			}
 		});
 		btnPrint.setBounds(180, 400, 74, 25);
